@@ -31,7 +31,7 @@ def get_shaoshupai_hot_list():
     hot_list = []
     for item in lists:
         hot_list.append({
-            'id': item['id'],
-            'title': item['title']
+            'title': item['title'],
+            'link': f'https://sspai.com/post/{item["id"]}'
         })
     return hot_list

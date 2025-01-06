@@ -243,3 +243,10 @@ body {
     animation: shimmer 1.5s infinite;
     border-radius: 4px;
 }
+
+.rating {
+    color: #666;
+    font-size: 14px;
+    font-weight: normal;
+    flex-shrink: 0;
+}

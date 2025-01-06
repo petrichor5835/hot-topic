@@ -1,6 +1,6 @@
 import requests
 import json
-
+from urllib.parse import quote
 
 def get_xsrf_token():
     headers = {
@@ -70,7 +70,6 @@ def get_wbpass(xsrf_token, SUB, SUBP):
         'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
         'accept-language': 'zh-CN,zh;q=0.9',
         'cache-control': 'no-cache',
-        # 'cookie': 'XSRF-TOKEN=svBD9T8Yx4Ms2QLZbN8uuZAM; SUB=_2AkMQMjxAf8NxqwFRmf4dzWrgZY1-yw7EieKmbs2bJRMxHRl-yT9yqmNdtRB6O7ISr27SrfhOqhoPufezO0uYBN2Hq3fs; SUBP=0033WrSXqPxfM72-Ws9jqgMF55529P9D9WWAiCSNwS_pd-2-5ubPok7q',
         'pragma': 'no-cache',
         'priority': 'u=0, i',
         'referer': 'https://passport.weibo.com/',
@@ -111,7 +110,7 @@ def get_news(cookies):
     response = requests.get('https://weibo.com/ajax/statuses/news', cookies=cookies, headers=headers)
     return response.text
 
-def get_weibo_hot_news(limit=15):
+def get_weibo_hot_news():
     """
     获取微博热搜新闻数据的主方法
     Args:
@@ -134,14 +133,18 @@ def get_weibo_hot_news(limit=15):
     
     # 获取新闻数据并解析
     response_data = json.loads(get_news(cookies))
-    
-    # 只返回前limit个话题
-    return response_data['data']['band_list'][:limit]
+    result = []
+    for item in response_data['data']['band_list']:
+        title = item['topic']
+        link = f'https://s.weibo.com/weibo?q=%23{quote(title)}%23'
+        result.append({
+            'title': title,
+            'link': link
+        })
+    return result
 
 if __name__ == '__main__':
-    hot_topics = get_weibo_hot_news()
-    for i, topic in enumerate(hot_topics, 1):
-        print(f"{i}. {topic['topic']}")
+    get_weibo_hot_news()
 
 
 

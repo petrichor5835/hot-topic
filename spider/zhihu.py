@@ -41,7 +41,7 @@ def get_zhihu_hot_list():
             
             result.append({
                 'title': title,
-                'id': id
+                'link': f'https://www.zhihu.com/question/{id}'
             })
         #返回前15个
         return result[:15]

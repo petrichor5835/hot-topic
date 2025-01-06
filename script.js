@@ -40,7 +40,12 @@ class NewsCard {
             'zhihu': '知乎热榜',
             'bilibili': 'B站热榜',
             'juejin': '掘金热榜',
-            'shaoshupai': '少数派热榜'
+            'shaoshupai': '少数派热榜',
+            'douban': '豆瓣新片榜',
+            'maoyan': '猫眼热榜',
+            'csdn': 'CSDN热榜',
+            'hgithub': 'HelloGithub',
+            '52pojie': '吾爱破解'
         };
         return names[this.platform] || this.platform;
     }
@@ -72,7 +77,7 @@ class NewsCard {
         newsList.classList.remove('fade-out');
         
         try {
-            const response = await fetch(`/api/${this.platform}/hot-news`);
+            const response = await fetch(`http://127.0.0.1:5000/api/${this.platform}/hot-news`);
             const result = await response.json();
             this.data = result.data;
             this.updateTime = result.updateTime;
@@ -112,22 +117,6 @@ class NewsCard {
         }, 300);
     }
 
-    generateUrl(item, platform) {
-        switch (platform) {
-            case 'weibo':
-                return `https://s.weibo.com/weibo?q=${encodeURIComponent(item.title)}`;
-            case 'zhihu':
-                return `https://www.zhihu.com/question/${item.id}`;
-            case 'bilibili':
-                return `https://search.bilibili.com/all?keyword=${encodeURIComponent(item.title)}`;
-            case 'juejin':
-                return `https://juejin.cn/post/${item.id}`;
-            case 'shaoshupai':
-                return `https://sspai.com/post/${item.id}`;
-            default:
-                return '#';
-        }
-    }
 
     render() {
         const newsList = this.cardElement.querySelector('.news-list');
@@ -135,10 +124,11 @@ class NewsCard {
             <li class="news-item">
                 <span class="rank ${index < 3 ? 'top' : ''}">${index + 1}</span>
                 <div class="title-container">
-                    <a href="${this.generateUrl(item, this.platform)}" 
+                    <a href="${item.link}" 
                        class="title" 
                        target="_blank">${item.title}</a>
                 </div>
+                ${item.rating ? `<span class="rating">${item.rating}</span>` : ''}
             </li>
         `).join('');
         
@@ -164,7 +154,12 @@ document.addEventListener('DOMContentLoaded', () => {
         { name: 'zhihu', icon: './images/zhihu-icon.png' },
         { name: 'bilibili', icon: './images/bilibili-icon.png' },
         { name: 'juejin', icon: './images/juejin-icon.png' },
-        { name: 'shaoshupai', icon: './images/shaoshupai-icon.png' }
+        { name: 'shaoshupai', icon: './images/shaoshupai-icon.png' },
+        { name: 'douban', icon: './images/douban-icon.png' },
+        { name: 'maoyan', icon: './images/maoyan-icon.png' },
+        { name: 'csdn', icon: './images/csdn-icon.png' },
+        { name: 'hgithub', icon: './images/hellogithub-icon.png' },
+        { name: '52pojie', icon: './images/52pojie-icon.png' }
     ];
 
     platforms.forEach(platform => {
