@@ -141,7 +141,7 @@ def get_weibo_hot_news():
             'title': title,
             'link': link
         })
-    return result
+    return result[:15]
 
 if __name__ == '__main__':
     get_weibo_hot_news()
